@@ -1,8 +1,11 @@
 package com.example.testaction;
 
+import org.springframework.stereotype.Service;
+
 /**
  * Service đơn giản dùng để test luồng CI (compile, checkstyle, test).
  */
+@Service
 public class CalculatorService {
 
     /**
