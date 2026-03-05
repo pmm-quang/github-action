@@ -64,7 +64,7 @@ jobs:
       - name: Run reviewdog for Checkstyle
         run: |
           if [ -f build/reports/checkstyle/main.xml ]; then
-            reviewdog -name="checkstyle" -f=checkstyle -reporter=github-check -filter-mode=nofilter -fail-level=error < build/reports/checkstyle/main.xml
+            reviewdog -name="checkstyle" -f=checkstyle -reporter=github-check -filter-mode=added -fail-level=error < build/reports/checkstyle/main.xml
           fi
 
   test:
