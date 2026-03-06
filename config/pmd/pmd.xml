@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<ruleset name="Backend Rules"
+         xmlns="http://pmd.sourceforge.net/ruleset/2.0.0">
+
+    <description>Custom rules for backend (PMD 7 compatible)</description>
+
+    <!-- Bad practices -->
+    <rule ref="category/java/bestpractices.xml/UnusedPrivateField"/>
+    <rule ref="category/java/bestpractices.xml/UnusedLocalVariable"/>
+
+    <!-- Code style: operator & parentheses -->
+    <rule ref="category/java/codestyle.xml/UnnecessaryFullyQualifiedName"/>
+    <rule ref="category/java/codestyle.xml/UselessParentheses"/>
+    <rule ref="category/java/codestyle.xml/UseDiamondOperator"/>
+
+    <!-- Error prone -->
+    <rule ref="category/java/errorprone.xml/CompareObjectsWithEquals"/>
+    <rule ref="category/java/errorprone.xml/AssignmentInOperand"/>
+
+    <!-- Complexity -->
+    <rule ref="category/java/design.xml/CyclomaticComplexity"/>
+    <rule ref="category/java/design.xml/NcssCount">
+        <properties>
+            <property name="methodReportLevel" value="80"/>
+        </properties>
+    </rule>
+
+</ruleset>

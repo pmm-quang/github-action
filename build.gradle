@@ -3,6 +3,7 @@ plugins {
     id 'org.springframework.boot' version '4.0.3'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'checkstyle'
+    id 'pmd'
 }
 
 group = 'com.example'
@@ -54,7 +55,30 @@ checkstyle {
 tasks.named('checkstyleMain', Checkstyle) {
     reports {
         xml.required = true
-        xml.outputLocation = file("$buildDir/reports/checkstyle/main.xml")
+        xml.outputLocation = layout.buildDirectory.file("reports/checkstyle/main.xml")
         html.required = false
     }
+}
+
+tasks.named('checkstyleTest') {
+    enabled = false
+}
+
+pmd {
+    toolVersion = "7.0.0"
+    ruleSets = []
+    ruleSetFiles = files("config/pmd/pmd.xml")
+    consoleOutput = true
+}
+
+tasks.named('pmdMain', Pmd) {
+    reports {
+        xml.required = true
+        xml.outputLocation = layout.buildDirectory.file("reports/pmd/main.xml")
+        html.required = false
+    }
+}
+
+tasks.named('pmdTest') {
+    enabled = false
 }

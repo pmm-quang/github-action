@@ -32,10 +32,13 @@ jobs:
       - name: Compile project
         run: ./gradlew clean compileJava
 
-  lint:
+  checkstyle:
     runs-on: ubuntu-latest
     needs: [compile]
-    timeout-minutes: 60
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      checks: write
 
     steps:
       - name: Checkout Repository
@@ -43,7 +46,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up JVM and Gradle
+      - name: Setup JDK
         uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -61,10 +64,48 @@ jobs:
         run: ./gradlew --continue checkstyleMain
         continue-on-error: true
 
-      - name: Run reviewdog for Checkstyle
+      - name: Reviewdog (Checkstyle) – chỉ code thay đổi
         run: |
           if [ -f build/reports/checkstyle/main.xml ]; then
             reviewdog -name="checkstyle" -f=checkstyle -reporter=github-check -filter-mode=added -fail-level=error < build/reports/checkstyle/main.xml
+          fi
+
+  pmd:
+    runs-on: ubuntu-latest
+    needs: [compile]
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      checks: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Grant execute permission
+        run: chmod +x gradlew
+
+      - name: Install reviewdog
+        uses: reviewdog/action-setup@v1
+        with:
+          reviewdog_version: latest
+
+      - name: Run PMD
+        run: ./gradlew --continue pmdMain
+        continue-on-error: true
+
+      - name: Reviewdog (PMD) – chỉ code thay đổi
+        run: |
+          if [ -f build/reports/pmd/main.xml ]; then
+            reviewdog -name="pmd" -f=pmd -reporter=github-check -filter-mode=added -fail-level=error < build/reports/pmd/main.xml
           fi
 
   test:
